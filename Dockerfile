@@ -12,10 +12,10 @@ RUN \
     alpine-sdk \
 \
   # Install actual dependencies
-  && apk add --no-cache icu-dev \
+  && apk add --no-cache git icu-dev \
 \
   # Install Gollum and associated packages
-  && gem install gollum redcarpet asciidoctor creole wikicloth org-ruby \
+  && gem install gollum github-markdown asciidoctor creole wikicloth org-ruby \
     RedCloth \
 \
   # Clean up build dependencies
