@@ -1,21 +1,28 @@
-FROM ubuntu:14.04
+FROM ruby:2.4-alpine
 MAINTAINER Zach Latta <zach@zachlatta.com>
 
-ENV DEBIAN_FRONTEND noninteractive
+RUN \
+  # Refresh package list
+  apk update \
+\
+  # Install build dependencies
+  && apk add --no-cache --virtual build-deps \
+    # Equivalent of Debian's build-essential, see
+    # https://github.com/gliderlabs/docker-alpine/issues/24#issuecomment-89770836
+    alpine-sdk \
+    # Needed for compilation of gollum deps
+    icu-dev \
+\
+  # Install Gollum and associated packages
+  && gem install gollum redcarpet github-markdown \
+\
+  # Clean up build dependencies
+  && apk del build-deps
 
-# Install dependencies
-RUN apt-get update && \
-  apt-get install -y -q build-essential ruby1.9.3 python python-docutils ruby-bundler libicu-dev libreadline-dev libssl-dev zlib1g-dev git-core && \
-  apt-get clean
-
-# Install gollum
-RUN gem install gollum redcarpet github-markdown
-
-# Initialize wiki data
-RUN mkdir /root/wikidata
-RUN git init /root/wikidata
+# Create volume at /data
+VOLUME /data
 
 # Expose default gollum port 4567
 EXPOSE 4567
 
-ENTRYPOINT ["/usr/local/bin/gollum", "/root/wikidata"]
+ENTRYPOINT ["/usr/local/bin/gollum", "/data"]
