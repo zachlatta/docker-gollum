@@ -10,8 +10,9 @@ RUN \
     # Equivalent of Debian's build-essential, see
     # https://github.com/gliderlabs/docker-alpine/issues/24#issuecomment-89770836
     alpine-sdk \
-    # Needed for compilation of gollum deps
-    icu-dev \
+\
+  # Install actual dependencies
+  && apk add --no-cache icu-dev \
 \
   # Install Gollum and associated packages
   && gem install gollum redcarpet github-markdown \
@@ -25,4 +26,4 @@ VOLUME /data
 # Expose default gollum port 4567
 EXPOSE 4567
 
-ENTRYPOINT ["/usr/local/bin/gollum", "/data"]
+ENTRYPOINT ["/usr/local/bundle/bin/gollum", "/data"]
