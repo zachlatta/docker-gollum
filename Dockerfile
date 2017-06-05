@@ -15,7 +15,8 @@ RUN \
   && apk add --no-cache icu-dev \
 \
   # Install Gollum and associated packages
-  && gem install gollum redcarpet github-markdown \
+  && gem install gollum redcarpet asciidoctor creole wikicloth org-ruby \
+    RedCloth \
 \
   # Clean up build dependencies
   && apk del build-deps
